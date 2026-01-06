@@ -1,0 +1,140 @@
+{
+  "users": [
+    {
+      "id": "u_101",
+      "name": "Bhagrajyoti Behera",
+      "email": "bhag@example.com",
+      "password": "password123",
+      "walletId": "w_101"
+    },
+    {
+      "id": "u_102",
+      "name": "Demo User",
+      "email": "demo@example.com",
+      "password": "password123",
+      "walletId": "w_102"
+    },
+    {
+      "id": "u_324dcd4e",
+      "name": "Test User",
+      "email": "test@example.com",
+      "password": "password123",
+      "walletId": "w_0ceb21b4"
+    },
+    {
+      "id": "u_9c6afc9a",
+      "name": "swaraj",
+      "email": "swarajkumar984@gmail.com",
+      "password": "swaraj@919",
+      "walletId": "w_d004ee5b"
+    }
+  ],
+  "wallets": [
+    {
+      "id": "w_101",
+      "userId": "u_101",
+      "balance": 10500.0,
+      "currency": "INR",
+      "updatedAt": "2026-01-06T10:00:00Z"
+    },
+    {
+      "id": "w_102",
+      "userId": "u_102",
+      "balance": 5000,
+      "currency": "INR",
+      "updatedAt": "2026-01-06T10:00:00Z"
+    },
+    {
+      "id": "w_0ceb21b4",
+      "userId": "u_324dcd4e",
+      "balance": 0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_d004ee5b",
+      "userId": "u_9c6afc9a",
+      "balance": 2960.0,
+      "currency": "INR"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx_201",
+      "walletId": "w_101",
+      "type": "credit",
+      "amount": 2000,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-05T09:30:00Z"
+    },
+    {
+      "id": "tx_301",
+      "walletId": "w_101",
+      "type": "debit",
+      "amount": 5000,
+      "fee": 100,
+      "status": "success",
+      "toUserId": "u_102",
+      "isDeleted": false,
+      "createdAt": "2026-01-06T11:00:00Z",
+      "reason": "Admin approved"
+    },
+    {
+      "id": "tx_1b94829c",
+      "walletId": "w_101",
+      "type": "credit",
+      "amount": 500.0,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-06T13:20:50.035358Z"
+    },
+    {
+      "id": "tx_10e57b06",
+      "walletId": "w_101",
+      "type": "debit",
+      "amount": 100.0,
+      "fee": 2.0,
+      "toUserId": "u_102",
+      "status": "success",
+      "isDeleted": true,
+      "createdAt": "2026-01-06T13:21:00.882083Z"
+    },
+    {
+      "id": "tx_8536959f",
+      "walletId": "w_101",
+      "type": "credit",
+      "amount": 102.0,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-06T13:23:36.324439Z"
+    },
+    {
+      "id": "tx_0a47d807",
+      "walletId": "w_d004ee5b",
+      "type": "credit",
+      "amount": 5000.0,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-06T13:43:13.475202Z"
+    },
+    {
+      "id": "tx_08852213",
+      "walletId": "w_d004ee5b",
+      "type": "debit",
+      "amount": 2000.0,
+      "fee": 40.0,
+      "toUserId": "u_101",
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-06T13:43:53.456572Z"
+    }
+  ],
+  "businessRules": {
+    "feePercentage": 2,
+    "maxTransferLimit": 10000
+  }
+}
