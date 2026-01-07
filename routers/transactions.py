@@ -25,13 +25,16 @@ def get_transactions(
     max_amount: Optional[float] = None,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
+    search: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1, le=100),
     user: dict = Depends(get_current_user)
 ):
     db = read_db()
     # Find user's wallet
     wallet = next((w for w in db["wallets"] if w["userId"] == user["id"]), None)
     if not wallet:
-        return {"total": 0, "data": []}
+        return {"total": 0, "page": page, "limit": limit, "data": []}
 
     transactions = [
         t for t in db["transactions"] 
@@ -64,12 +67,46 @@ def get_transactions(
     if end_date:
         transactions = [t for t in transactions if t["createdAt"] <= end_date]
 
+    # 5. Search Filter (Name or Description)
+    if search:
+        search_lower = search.lower()
+        users_map = {u["id"]: u["name"] for u in db["users"]}
+        filtered_txs = []
+        for tx in transactions:
+            match = False
+            # Check description
+            if tx.get("description") and search_lower in tx["description"].lower():
+                match = True
+            
+            # Check name
+            if not match:
+                other_user_id = tx.get("toUserId") if tx["type"] == "debit" else tx.get("fromUserId")
+                if other_user_id:
+                     name = users_map.get(other_user_id, "")
+                     if search_lower in name.lower():
+                         match = True
+                elif tx["type"] == "credit": # Wallet Top-up
+                     if "wallet top-up" in search_lower or "bank transfer" in search_lower:
+                         match = True
+
+            if match:
+                filtered_txs.append(tx)
+        transactions = filtered_txs
+
     # Sort by date (newest first)
     transactions.sort(key=lambda x: x["createdAt"], reverse=True)
 
+    # Pagination
+    total = len(transactions)
+    start = (page - 1) * limit
+    end = start + limit
+    paginated_data = transactions[start:end]
+
     return {
-        "total": len(transactions),
-        "data": transactions
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "data": paginated_data
     }
 
 @router.get("/recent")
