@@ -10,9 +10,11 @@ export default function TransferMoney({ refreshWallet }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
+  const [transactionLimit, setTransactionLimit] = useState(null);
 
   useEffect(() => {
     api.get("/users").then(res => setUsers(res.data));
+    api.get("/config/business-rules").then(res => setTransactionLimit(res.data.maxTransferLimit));
   }, []);
 
   const initiateTransfer = () => {
@@ -23,6 +25,10 @@ export default function TransferMoney({ refreshWallet }) {
     }
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
         setError("Please enter a valid amount");
+        return;
+    }
+    if (transactionLimit && Number(amount) > transactionLimit) {
+        setError(`Amount exceeds the transaction limit of ₹${transactionLimit.toLocaleString()}`);
         return;
     }
     setIsPinDialogOpen(true);

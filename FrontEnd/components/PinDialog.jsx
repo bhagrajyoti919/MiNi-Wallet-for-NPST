@@ -7,7 +7,7 @@ import {
   InputOTPSlot,
 } from "./ui/input-otp";
 
-export default function PinDialog({ isOpen, mode, onSubmit, onCancel, error }) {
+export default function PinDialog({ isOpen, mode, onSubmit, onCancel, error, isLoading = false }) {
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
   const [localError, setLocalError] = useState("");
@@ -26,6 +26,7 @@ export default function PinDialog({ isOpen, mode, onSubmit, onCancel, error }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isLoading) return;
     setLocalError("");
 
     if (pin.length < 6) {
@@ -117,9 +118,10 @@ export default function PinDialog({ isOpen, mode, onSubmit, onCancel, error }) {
             )}
             <button
               type="submit"
-              className="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors shadow-lg shadow-blue-500/20"
+              disabled={isLoading}
+              className="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {mode === "set" ? "Set PIN" : "Submit"}
+              {isLoading ? "Processing..." : (mode === "set" ? "Set PIN" : "Submit")}
             </button>
           </div>
         </form>

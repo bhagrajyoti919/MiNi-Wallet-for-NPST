@@ -12,6 +12,7 @@ export default function Login({ onLogin }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (email, password) => {
+    console.log("Attempting login with:", email); 
     try {
       setIsLoading(true);
       setError("");
@@ -19,11 +20,13 @@ export default function Login({ onLogin }) {
         email: email,
         password: password
       });
+      console.log("Login success", response.data);
       localStorage.setItem("token", response.data.token);
       onLogin();
     } catch (err) {
-      console.error("Login failed", err);
-      setError("Invalid credentials. Please try again.");
+      console.error("Login failed details:", err.response ? err.response.data : err.message);
+      console.error("Full error:", err);
+      setError(err.response?.data?.detail || "Invalid credentials. Please try again.");
       setIsLoading(false);
     }
   };

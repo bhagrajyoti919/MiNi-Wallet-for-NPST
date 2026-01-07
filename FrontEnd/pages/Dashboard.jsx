@@ -1,22 +1,26 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/sidebar";
 import {
   IconArrowLeft,
   IconBrandTabler,
   IconSettings,
   IconUserBolt,
+  IconSend,
+  IconPlus,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import api from "../api/api";
-import AddMoney from "../components/AddMoney";
-import TransferMoney from "../components/TransferMoney";
+import AddMoneyDialog from "../components/AddMoneyDialog";
 import PinDialog from "../components/PinDialog";
 import SettingsDialog from "../components/SettingsDialog";
 import ProfileDialog from "../components/ProfileDialog";
+import SpendingAnalytics from "../components/SpendingAnalytics";
 
 export default function Dashboard({ onLogout }) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [wallet, setWallet] = useState(null);
@@ -24,6 +28,9 @@ export default function Dashboard({ onLogout }) {
   
   // Settings state
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // Add Money state
+  const [isAddMoneyOpen, setIsAddMoneyOpen] = useState(false);
   
   // Profile state
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -99,11 +106,6 @@ export default function Dashboard({ onLogout }) {
       }
   };
 
-  const handleViewBalance = () => {
-    setPinMode("enter");
-    setIsPinDialogOpen(true);
-  };
-
   const handleDeleteUser = async () => {
       if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
           try {
@@ -117,13 +119,6 @@ export default function Dashboard({ onLogout }) {
   };
 
   const links = [
-    {
-      label: "Dashboard",
-      href: "#",
-      icon: (
-        <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-      ),
-    },
     {
       label: "Profile",
       href: "#",
@@ -167,7 +162,15 @@ export default function Dashboard({ onLogout }) {
         user={user}
         wallet={wallet}
         onDeleteUser={handleDeleteUser}
-        onCheckBalance={handleViewBalance}
+        onCheckBalance={() => {
+            setIsSettingsOpen(false);
+            navigate('/history');
+        }}
+      />
+      <AddMoneyDialog 
+        isOpen={isAddMoneyOpen}
+        onClose={() => setIsAddMoneyOpen(false)}
+        refreshWallet={refreshWallet}
       />
       <ProfileDialog 
         isOpen={isProfileOpen}
@@ -234,7 +237,7 @@ export default function Dashboard({ onLogout }) {
         wallet={wallet} 
         transactions={transactions} 
         refreshWallet={refreshWallet}
-        onViewBalance={handleViewBalance}
+        onAddMoneyClick={() => setIsAddMoneyOpen(true)}
       />
     </div>
     </>
@@ -271,7 +274,9 @@ export const LogoIcon = () => {
 };
 
 // Dashboard component with content
-const DashboardContent = ({ user, wallet, transactions, refreshWallet, onViewBalance }) => {
+const DashboardContent = ({ user, wallet, transactions, refreshWallet, onAddMoneyClick }) => {
+  const navigate = useNavigate();
+
   if (!user) {
     return (
       <div className="flex flex-1 p-10 items-center justify-center">
@@ -295,73 +300,61 @@ const DashboardContent = ({ user, wallet, transactions, refreshWallet, onViewBal
           <p className="text-neutral-500 mt-2">Manage your wallet and transactions</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="p-6 rounded-xl bg-gradient-to-br from-neutral-900 to-neutral-800 text-white shadow-xl">
-            <h3 className="text-sm font-medium opacity-70">Total Balance</h3>
-            {wallet ? (
-                <div className="text-4xl font-bold mt-2">₹{wallet.balance.toLocaleString()}</div>
-            ) : (
-                <button 
-                    onClick={onViewBalance}
-                    className="mt-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2"
-                >
-                    <span>View Balance</span>
-                </button>
-            )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div 
+            onClick={() => navigate('/history')}
+            className="p-6 rounded-xl bg-gradient-to-br from-neutral-900 to-neutral-800 text-white shadow-xl cursor-pointer hover:opacity-90 transition-opacity flex flex-col justify-between"
+          >
+             <div>
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                    <IconBrandTabler className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold">Balance & History</h3>
+                <p className="text-sm opacity-80 mt-1">Check balance and transactions</p>
+             </div>
+             <div className="flex items-center gap-2 text-sm font-medium mt-4">
+                <span>View Details</span>
+                <IconArrowLeft className="w-4 h-4 rotate-180" />
+             </div>
           </div>
-          
-          <div className="p-6 rounded-xl bg-white border border-neutral-200 shadow-sm dark:bg-neutral-800 dark:border-neutral-700">
-             <h3 className="text-lg font-bold mb-4 text-neutral-800 dark:text-white">Quick Actions</h3>
-             <div className="flex gap-2 text-sm text-neutral-500">
-                Use the forms below to add or transfer money. PIN will be required.
+
+          <div 
+            onClick={() => navigate('/transfer')}
+            className="p-6 rounded-xl bg-blue-600 text-white shadow-xl cursor-pointer hover:bg-blue-700 transition-colors flex flex-col justify-between"
+          >
+             <div>
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                    <IconSend className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold">Transfer Money</h3>
+                <p className="text-sm opacity-80 mt-1">Send money to friends instantly</p>
+             </div>
+             <div className="flex items-center gap-2 text-sm font-medium mt-4">
+                <span>Send Now</span>
+                <IconArrowLeft className="w-4 h-4 rotate-180" />
+             </div>
+          </div>
+
+          <div 
+            onClick={onAddMoneyClick}
+            className="p-6 rounded-xl bg-green-600 text-white shadow-xl cursor-pointer hover:bg-green-700 transition-colors flex flex-col justify-between"
+          >
+             <div>
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                    <IconPlus className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold">Add Money</h3>
+                <p className="text-sm opacity-80 mt-1">Top up your wallet</p>
+             </div>
+             <div className="flex items-center gap-2 text-sm font-medium mt-4">
+                <span>Add Now</span>
+                <IconArrowLeft className="w-4 h-4 rotate-180" />
              </div>
           </div>
         </div>
 
-        <div className="flex flex-col xl:flex-row gap-6">
-            <div className="flex-1 space-y-6">
-                <AddMoney refreshWallet={refreshWallet} />
-                <TransferMoney refreshWallet={refreshWallet} />
-            </div>
+        <SpendingAnalytics transactions={transactions} />
 
-            <div className="flex-1">
-                <h3 className="text-xl font-bold mb-4 text-neutral-800 dark:text-white">Recent Transactions</h3>
-                {!wallet ? (
-                     <div className="p-8 text-center text-neutral-500 border border-dashed border-neutral-300 dark:border-neutral-700 rounded-xl">
-                        View balance to see transaction history
-                     </div>
-                ) : transactions.length === 0 ? (
-                    <p className="text-neutral-500">No transactions yet.</p>
-                ) : (
-                    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
-                        <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
-                            {transactions.map(tx => (
-                                <li key={tx.id} className="p-4 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors">
-                                    <div className="flex justify-between items-center">
-                                        <div>
-                                            <div className="font-medium text-neutral-800 dark:text-neutral-200">{tx.type}</div>
-                                            <div className="text-xs text-neutral-500">{new Date(tx.createdAt || Date.now()).toLocaleDateString()}</div>
-                                        </div>
-                                        <div className="text-right">
-                                            <div className={cn("font-bold", 
-                                                tx.type === 'credit' ? "text-green-600" : "text-neutral-800 dark:text-neutral-200"
-                                            )}>
-                                                {tx.type === 'credit' ? '+' : '-'}₹{tx.amount}
-                                            </div>
-                                            <div className={cn("text-xs capitalize",
-                                                tx.status === 'success' ? "text-green-500" : "text-yellow-500"
-                                            )}>
-                                                {tx.status}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
-        </div>
       </div>
     </div>
   );
