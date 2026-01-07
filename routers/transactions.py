@@ -103,9 +103,9 @@ def update_status(tx_id: str, payload: TransactionStatusUpdate):
 @router.delete("/{tx_id}")
 def delete_transaction(tx_id: str):
     db = read_db()
-    for tx in db["transactions"]:
+    for i, tx in enumerate(db["transactions"]):
         if tx["id"] == tx_id:
-            tx["isDeleted"] = True
+            db["transactions"].pop(i)
             write_db(db)
-            return {"message": "Transaction deleted"}
+            return {"message": "Transaction deleted permanently"}
     return {"error": "Transaction not found"}

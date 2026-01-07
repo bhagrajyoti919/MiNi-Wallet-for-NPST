@@ -139,6 +139,14 @@
       "email": "receiver_fee_1767826522@example.com",
       "password": "password123",
       "walletId": "w_d3ca66bd"
+    },
+    {
+      "id": "u_5e29aebd",
+      "name": "Test User",
+      "email": "test_ZJlWq0QuVv@example.com",
+      "password": "password123",
+      "walletId": "w_45c71903",
+      "pin": "1234"
     }
   ],
   "wallets": [
@@ -255,6 +263,12 @@
     {
       "id": "w_d3ca66bd",
       "userId": "u_d99c27b3",
+      "balance": 100.0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_45c71903",
+      "userId": "u_5e29aebd",
       "balance": 100.0,
       "currency": "INR"
     }
@@ -377,16 +391,6 @@
       "createdAt": "2026-01-07T20:30:43.547399Z"
     },
     {
-      "id": "tx_4a9e88bc",
-      "walletId": "w_d004ee5b",
-      "type": "credit",
-      "amount": 454654.0,
-      "fee": 0,
-      "status": "success",
-      "isDeleted": false,
-      "createdAt": "2026-01-07T21:45:49.111617Z"
-    },
-    {
       "id": "tx_5ce116ce",
       "walletId": "w_d004ee5b",
       "type": "credit",
@@ -405,7 +409,7 @@
       "toUserId": "u_102",
       "status": "failed",
       "reason": "Transfer limit exceeded",
-      "isDeleted": false,
+      "isDeleted": true,
       "createdAt": "2026-01-07T22:14:21.612614Z"
     },
     {
@@ -415,18 +419,8 @@
       "amount": 200.0,
       "fee": 0,
       "status": "success",
-      "isDeleted": false,
+      "isDeleted": true,
       "createdAt": "2026-01-07T22:21:28.881182Z"
-    },
-    {
-      "id": "tx_304e3b87",
-      "walletId": "w_d004ee5b",
-      "type": "credit",
-      "amount": 200.0,
-      "fee": 0,
-      "status": "success",
-      "isDeleted": false,
-      "createdAt": "2026-01-07T22:21:29.811380Z"
     },
     {
       "id": "tx_da6a97c6",
@@ -435,7 +429,7 @@
       "amount": 100.0,
       "fee": 0,
       "status": "success",
-      "isDeleted": false,
+      "isDeleted": true,
       "createdAt": "2026-01-07T22:23:03.859418Z"
     },
     {
@@ -445,7 +439,7 @@
       "amount": 100.0,
       "fee": 0,
       "status": "success",
-      "isDeleted": false,
+      "isDeleted": true,
       "createdAt": "2026-01-07T22:24:35.832357Z"
     },
     {
@@ -465,7 +459,7 @@
       "amount": 200.0,
       "fee": 0,
       "status": "success",
-      "isDeleted": false,
+      "isDeleted": true,
       "createdAt": "2026-01-07T22:30:14.980052Z"
     },
     {
@@ -499,7 +493,7 @@
       "toUserId": "u_f9e92543",
       "status": "failed",
       "reason": "Transfer limit exceeded",
-      "isDeleted": false,
+      "isDeleted": true,
       "createdAt": "2026-01-07T22:36:37.333303Z"
     },
     {
@@ -552,7 +546,7 @@
       "fee": 2.0,
       "toUserId": "u_f9e92543",
       "status": "success",
-      "isDeleted": false,
+      "isDeleted": true,
       "createdAt": "2026-01-07T22:58:08.279192Z"
     },
     {
@@ -565,6 +559,16 @@
       "status": "success",
       "isDeleted": false,
       "createdAt": "2026-01-07T22:58:08.279192Z"
+    },
+    {
+      "id": "tx_fe9582bf",
+      "walletId": "w_45c71903",
+      "type": "credit",
+      "amount": 100.0,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": true,
+      "createdAt": "2026-01-07T23:08:39.628735Z"
     }
   ],
   "businessRules": {

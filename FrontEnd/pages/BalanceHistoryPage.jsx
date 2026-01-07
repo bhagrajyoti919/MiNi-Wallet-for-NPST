@@ -10,7 +10,8 @@ import {
   IconBrandTabler,
   IconFilter,
   IconWallet,
-  IconDownload
+  IconDownload,
+  IconTrash
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ import api from "../api/api";
 import PinDialog from "../components/PinDialog";
 import SettingsDialog from "../components/SettingsDialog";
 import ProfileDialog from "../components/ProfileDialog";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 
 export default function BalanceHistoryPage({ onLogout }) {
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ export default function BalanceHistoryPage({ onLogout }) {
   
   // Data states
   const [currentUser, setCurrentUser] = useState(null);
+  const [transactionToDelete, setTransactionToDelete] = useState(null);
   const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -196,6 +199,23 @@ export default function BalanceHistoryPage({ onLogout }) {
               alert("Failed to delete account");
           }
       }
+  };
+
+  const handleDeleteTransaction = (txId) => {
+    setTransactionToDelete(txId);
+  };
+
+  const confirmDeleteTransaction = async () => {
+    if (!transactionToDelete) return;
+    
+    try {
+        await api.delete(`/transactions/${transactionToDelete}`);
+        setTransactions(prev => prev.filter(tx => tx.id !== transactionToDelete));
+        setTransactionToDelete(null);
+    } catch (err) {
+        console.error("Failed to delete transaction", err);
+        alert("Failed to delete transaction");
+    }
   };
 
   const links = [
@@ -453,20 +473,32 @@ export default function BalanceHistoryPage({ onLogout }) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="text-right">
-                                            <div className={`font-bold ${amountColor} text-lg`}>
-                                                {amountSign}₹{tx.amount.toLocaleString()}
-                                            </div>
-                                            <div className="text-xs text-neutral-400 mt-1 flex flex-col items-end gap-0.5">
-                                                <div className="flex items-center gap-1">
-                                                    <span className={tx.status === 'failed' ? 'text-red-500 capitalize' : 'capitalize'}>{tx.status}</span>
-                                                    {tx.status === 'success' && <div className="w-2 h-2 bg-green-500 rounded-full"></div>}
-                                                    {tx.status === 'failed' && <div className="w-2 h-2 bg-red-500 rounded-full"></div>}
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-right">
+                                                <div className={`font-bold ${amountColor} text-lg`}>
+                                                    {amountSign}₹{tx.amount.toLocaleString()}
                                                 </div>
-                                                {tx.status === 'failed' && tx.reason && (
-                                                    <span className="text-[10px] text-red-400">{tx.reason}</span>
-                                                )}
+                                                <div className="text-xs text-neutral-400 mt-1 flex flex-col items-end gap-0.5">
+                                                    <div className="flex items-center gap-1">
+                                                        <span className={tx.status === 'failed' ? 'text-red-500 capitalize' : 'capitalize'}>{tx.status}</span>
+                                                        {tx.status === 'success' && <div className="w-2 h-2 bg-green-500 rounded-full"></div>}
+                                                        {tx.status === 'failed' && <div className="w-2 h-2 bg-red-500 rounded-full"></div>}
+                                                    </div>
+                                                    {tx.status === 'failed' && tx.reason && (
+                                                        <span className="text-[10px] text-red-400">{tx.reason}</span>
+                                                    )}
+                                                </div>
                                             </div>
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteTransaction(tx.id);
+                                                }}
+                                                className="p-2 text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
+                                                title="Delete transaction"
+                                            >
+                                                <IconTrash size={18} />
+                                            </button>
                                         </div>
                                     </div>
                                 );
@@ -489,6 +521,16 @@ export default function BalanceHistoryPage({ onLogout }) {
         onCancel={() => setIsBalancePinOpen(false)}
         error={balanceError}
         title="Enter PIN to Check Balance"
+      />
+      
+      <ConfirmationDialog 
+        isOpen={!!transactionToDelete}
+        onClose={() => setTransactionToDelete(null)}
+        onConfirm={confirmDeleteTransaction}
+        title="Delete Transaction"
+        message="Are you sure you want to delete this transaction record? This action cannot be undone."
+        confirmText="Delete"
+        type="danger"
       />
     </>
   );
