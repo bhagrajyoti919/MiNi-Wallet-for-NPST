@@ -81,6 +81,64 @@
       "email": "receiver_1767825325@example.com",
       "password": "password123",
       "walletId": "w_705abdb5"
+    },
+    {
+      "id": "u_15e86ce8",
+      "name": "Fee Sender",
+      "email": "sender_fee_1767826438@example.com",
+      "password": "password123",
+      "walletId": "w_1be1a2a4"
+    },
+    {
+      "id": "u_ff147e6d",
+      "name": "Fee Receiver",
+      "email": "receiver_fee_1767826438@example.com",
+      "password": "password123",
+      "walletId": "w_125f4b0f"
+    },
+    {
+      "id": "u_0a7f6f49",
+      "name": "Fee Sender",
+      "email": "sender_fee_1767826458@example.com",
+      "password": "password123",
+      "walletId": "w_2f05bc5e"
+    },
+    {
+      "id": "u_ba9249df",
+      "name": "Fee Receiver",
+      "email": "receiver_fee_1767826458@example.com",
+      "password": "password123",
+      "walletId": "w_133a15be"
+    },
+    {
+      "id": "u_06bff093",
+      "name": "Fee Sender",
+      "email": "sender_fee_1767826491@example.com",
+      "password": "password123",
+      "walletId": "w_f19f3c27",
+      "pin": "123456"
+    },
+    {
+      "id": "u_36626042",
+      "name": "Fee Receiver",
+      "email": "receiver_fee_1767826491@example.com",
+      "password": "password123",
+      "walletId": "w_4b147a66"
+    },
+    {
+      "id": "u_39cacc6f",
+      "name": "Fee Sender",
+      "email": "sender_fee_1767826522@example.com",
+      "password": "password123",
+      "walletId": "w_2aa9156c",
+      "pin": "123456"
+    },
+    {
+      "id": "u_d99c27b3",
+      "name": "Fee Receiver",
+      "email": "receiver_fee_1767826522@example.com",
+      "password": "password123",
+      "walletId": "w_d3ca66bd"
     }
   ],
   "wallets": [
@@ -107,7 +165,7 @@
     {
       "id": "w_d004ee5b",
       "userId": "u_9c6afc9a",
-      "balance": 912494.76,
+      "balance": 912392.76,
       "currency": "INR"
     },
     {
@@ -119,7 +177,7 @@
     {
       "id": "w_9024df61",
       "userId": "u_f9e92543",
-      "balance": 121.0,
+      "balance": 221.0,
       "currency": "INR"
     },
     {
@@ -150,6 +208,54 @@
       "id": "w_705abdb5",
       "userId": "u_b0a092ff",
       "balance": 0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_1be1a2a4",
+      "userId": "u_15e86ce8",
+      "balance": 0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_125f4b0f",
+      "userId": "u_ff147e6d",
+      "balance": 0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_2f05bc5e",
+      "userId": "u_0a7f6f49",
+      "balance": 0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_133a15be",
+      "userId": "u_ba9249df",
+      "balance": 0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_f19f3c27",
+      "userId": "u_06bff093",
+      "balance": 1000.0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_4b147a66",
+      "userId": "u_36626042",
+      "balance": 0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_2aa9156c",
+      "userId": "u_39cacc6f",
+      "balance": 898.0,
+      "currency": "INR"
+    },
+    {
+      "id": "w_d3ca66bd",
+      "userId": "u_d99c27b3",
+      "balance": 100.0,
       "currency": "INR"
     }
   ],
@@ -395,6 +501,70 @@
       "reason": "Transfer limit exceeded",
       "isDeleted": false,
       "createdAt": "2026-01-07T22:36:37.333303Z"
+    },
+    {
+      "id": "tx_15e0bf15",
+      "walletId": "w_f19f3c27",
+      "type": "credit",
+      "amount": 1000.0,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-07T22:55:04.263322Z"
+    },
+    {
+      "id": "tx_14bc997b",
+      "walletId": "w_2aa9156c",
+      "type": "credit",
+      "amount": 1000.0,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-07T22:55:35.162028Z"
+    },
+    {
+      "id": "tx_282f6de3",
+      "walletId": "w_2aa9156c",
+      "type": "debit",
+      "amount": 100.0,
+      "fee": 2.0,
+      "toUserId": "u_d99c27b3",
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-07T22:55:39.252314Z"
+    },
+    {
+      "id": "tx_10145223",
+      "walletId": "w_d3ca66bd",
+      "type": "credit",
+      "amount": 100.0,
+      "fee": 0,
+      "fromUserId": "u_39cacc6f",
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-07T22:55:39.252314Z"
+    },
+    {
+      "id": "tx_557ef907",
+      "walletId": "w_d004ee5b",
+      "type": "debit",
+      "amount": 100.0,
+      "fee": 2.0,
+      "toUserId": "u_f9e92543",
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-07T22:58:08.279192Z"
+    },
+    {
+      "id": "tx_f225a38c",
+      "walletId": "w_9024df61",
+      "type": "credit",
+      "amount": 100.0,
+      "fee": 0,
+      "fromUserId": "u_9c6afc9a",
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-07T22:58:08.279192Z"
     }
   ],
   "businessRules": {

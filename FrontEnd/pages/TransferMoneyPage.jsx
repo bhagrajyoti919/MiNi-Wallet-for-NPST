@@ -28,6 +28,7 @@ export default function TransferMoneyPage({ onLogout }) {
   const [users, setUsers] = useState([]);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [transactionLimit, setTransactionLimit] = useState(null);
+  const [feePercentage, setFeePercentage] = useState(0);
   
   // Transfer states
   const [selectedUser, setSelectedUser] = useState(null);
@@ -58,7 +59,10 @@ export default function TransferMoneyPage({ onLogout }) {
     api.get("/transactions/recent").then((res) => setRecentTransactions(res.data)).catch(console.error);
 
     // Fetch business rules
-    api.get("/config/business-rules").then((res) => setTransactionLimit(res.data.maxTransferLimit)).catch(console.error);
+    api.get("/config/business-rules").then((res) => {
+      setTransactionLimit(res.data.maxTransferLimit);
+      setFeePercentage(res.data.feePercentage || 0);
+    }).catch(console.error);
   }, []);
 
   const filteredUsers = users.filter(user => 
@@ -298,10 +302,32 @@ export default function TransferMoneyPage({ onLogout }) {
                                             className="w-full pl-10 pr-4 py-4 text-4xl font-bold text-center bg-transparent border-b-2 border-neutral-200 focus:border-blue-500 outline-none transition-colors text-neutral-800 dark:text-neutral-200"
                                             placeholder="0"
                                             value={amount}
-                                            onChange={(e) => setAmount(e.target.value)}
+                                            onChange={(e) => {
+                                                setAmount(e.target.value);
+                                                setError("");
+                                            }}
                                             autoFocus
                                         />
                                     </div>
+
+                                    {amount && Number(amount) > 0 && (
+                                        <div className="mt-6 w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-4 rounded-xl shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                                            <div className="flex justify-between text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+                                                <span>Transfer Amount</span>
+                                                <span>₹{Number(amount).toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+                                                <span>Transaction Fee ({feePercentage}%)</span>
+                                                <span>₹{(Number(amount) * feePercentage / 100).toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between font-bold text-neutral-800 dark:text-neutral-200 border-t border-neutral-200 dark:border-neutral-700 pt-2 mt-2">
+                                                <span>Total Deducted</span>
+                                                <span>₹{(Number(amount) + (Number(amount) * feePercentage / 100)).toFixed(2)}</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
                                 </div>
 
                                 <button 
