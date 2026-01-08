@@ -26,20 +26,16 @@ export default function Dashboard({ onLogout }) {
   const [wallet, setWallet] = useState(null);
   const [transactions, setTransactions] = useState([]);
   
-  // Settings state
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  // Add Money state
   const [isAddMoneyOpen, setIsAddMoneyOpen] = useState(false);
   
-  // Profile state
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   
-  // PIN related state
   const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
-  const [pinMode, setPinMode] = useState("enter"); // 'enter' or 'set'
+  const [pinMode, setPinMode] = useState("enter");
   const [pinError, setPinError] = useState("");
-  const [sessionPin, setSessionPin] = useState(null); // Store PIN for session (optional, but helps with refreshes if we wanted)
+  const [sessionPin, setSessionPin] = useState(null);
 
   useEffect(() => {
     async function loadUser() {
@@ -47,7 +43,6 @@ export default function Dashboard({ onLogout }) {
         const me = await api.get("/users/me");
         setUser(me.data);
 
-        // Check if user has PIN
         if (!me.data.pin) {
             setPinMode("set");
             setIsPinDialogOpen(true);
@@ -65,14 +60,13 @@ export default function Dashboard({ onLogout }) {
         if (pinMode === "set") {
             await api.post("/auth/set-pin", { pin });
             setPinMode("enter");
-            // Automatically try to fetch wallet with the new PIN
             await fetchWalletData(pin);
             setIsPinDialogOpen(false);
         } else {
             await fetchWalletData(pin);
             setIsPinDialogOpen(false);
         }
-        setSessionPin(pin); // Keep it if needed for child components, though strictly they should ask again
+        setSessionPin(pin);
     } catch (e) {
         console.error("PIN Action failed", e);
         setPinError(e.response?.data?.detail || "Invalid PIN");
@@ -89,7 +83,6 @@ export default function Dashboard({ onLogout }) {
   };
   
   const refreshWallet = async () => {
-      // If we have a session PIN (which we do after unlock), use it to refresh
       if (sessionPin) {
           try {
             const walletRes = await api.get("/wallet", {
@@ -97,7 +90,6 @@ export default function Dashboard({ onLogout }) {
             });
             setWallet(walletRes.data);
             
-            // Also refresh transactions
             const tx = await api.get("/transactions/recent");
             setTransactions(tx.data);
           } catch (e) {

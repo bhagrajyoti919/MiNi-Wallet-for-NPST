@@ -37,20 +37,17 @@ export default function BalanceHistoryPage({ onLogout }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   
-  // Data states
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionToDelete, setTransactionToDelete] = useState(null);
   const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Balance Check states
   const [balance, setBalance] = useState(null);
   const [showBalance, setShowBalance] = useState(false);
   const [isBalancePinOpen, setIsBalancePinOpen] = useState(false);
   const [balanceError, setBalanceError] = useState("");
 
-  // Filter & Search states
   const [searchQuery, setSearchQuery] = useState("");
   const [showSent, setShowSent] = useState(true);
   const [showReceived, setShowReceived] = useState(true);
@@ -61,11 +58,9 @@ export default function BalanceHistoryPage({ onLogout }) {
   const [endDate, setEndDate] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Dialog states (for sidebar)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  // Fetch transactions based on filters
   const fetchTransactions = async (overrides = {}) => {
     try {
       setLoading(true);

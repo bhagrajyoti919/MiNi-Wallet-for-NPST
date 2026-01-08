@@ -47,7 +47,6 @@ export default function TransferMoney({ refreshWallet }) {
       setAmount("");
       setToUserId("");
       setIsPinDialogOpen(false);
-      // Optional: Show success message
     } catch (err) {
       console.error("Transfer failed", err);
       setError(err.response?.data?.detail || "Transfer failed");

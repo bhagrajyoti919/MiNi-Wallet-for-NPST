@@ -52,7 +52,6 @@ export default function ProfileDialog({ isOpen, onClose, user, onUpdateUser }) {
           "Content-Type": "multipart/form-data",
         },
       });
-      // Update local user state with new image
       onUpdateUser({ ...user, profileImage: response.data.profileImage });
     } catch (error) {
       console.error("Failed to upload image", error);
@@ -62,11 +61,9 @@ export default function ProfileDialog({ isOpen, onClose, user, onUpdateUser }) {
     }
   };
 
-  // Helper to get full image URL
   const getImageUrl = (path) => {
     if (!path) return null;
     if (path.startsWith("http")) return path;
-    // Assuming backend is on localhost:8000
     return `http://localhost:8000/${path}`; 
   };
 
@@ -80,7 +77,6 @@ export default function ProfileDialog({ isOpen, onClose, user, onUpdateUser }) {
         onClick={(e) => e.stopPropagation()}
       >
         
-        {/* Header */}
         <div className="p-4 flex items-center gap-2 border-b border-neutral-100 dark:border-neutral-800">
             <button onClick={onClose} className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors">
                 <IconChevronRight className="rotate-180 w-6 h-6 text-neutral-700 dark:text-neutral-300" />
@@ -90,7 +86,6 @@ export default function ProfileDialog({ isOpen, onClose, user, onUpdateUser }) {
 
         <div className="overflow-y-auto p-6 space-y-8">
             
-            {/* Image & Name Section */}
             <div className="flex flex-col items-center gap-4">
                 <div className="relative group cursor-pointer" onClick={handleImageClick}>
                     <div className={cn(

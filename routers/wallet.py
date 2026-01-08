@@ -70,7 +70,6 @@ def transfer_money(payload: TransferRequest, user: dict = Depends(get_current_us
     rules = db["businessRules"]
 
     if payload.amount > rules["maxTransferLimit"]:
-        # Record failure
         db["transactions"].append({
             "id": generate_id("tx"),
             "walletId": wallet["id"],
@@ -90,7 +89,6 @@ def transfer_money(payload: TransferRequest, user: dict = Depends(get_current_us
     total = payload.amount + fee
 
     if wallet["balance"] < total:
-        # Record failure
         db["transactions"].append({
             "id": generate_id("tx"),
             "walletId": wallet["id"],

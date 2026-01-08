@@ -12,7 +12,6 @@ def get_rules():
 def update_rules(rules: BusinessRulesUpdate):
     db = read_db()
     current_rules = db.get("businessRules", {})
-    # Update only the provided fields
     current_rules["maxTransferLimit"] = rules.maxTransferLimit
     db["businessRules"] = current_rules
     write_db(db)

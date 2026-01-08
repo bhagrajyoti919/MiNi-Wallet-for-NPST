@@ -22,7 +22,6 @@ export default function TransferMoneyPage({ onLogout }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   
-  // Data states
   const [currentUser, setCurrentUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
@@ -30,7 +29,6 @@ export default function TransferMoneyPage({ onLogout }) {
   const [transactionLimit, setTransactionLimit] = useState(null);
   const [feePercentage, setFeePercentage] = useState(0);
   
-  // Transfer states
   const [selectedUser, setSelectedUser] = useState(null);
   const [amount, setAmount] = useState("");
   const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
@@ -44,21 +42,16 @@ export default function TransferMoneyPage({ onLogout }) {
     onCloseAction: null
   });
 
-  // Dialog states (for sidebar consistency)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
-    // Fetch current user for sidebar
     api.get("/users/me").then((res) => setCurrentUser(res.data)).catch(console.error);
 
-    // Fetch users for suggestions
     api.get("/users").then((res) => setUsers(res.data)).catch(console.error);
     
-    // Fetch recent transactions
     api.get("/transactions/recent").then((res) => setRecentTransactions(res.data)).catch(console.error);
 
-    // Fetch business rules
     api.get("/config/business-rules").then((res) => {
       setTransactionLimit(res.data.maxTransferLimit);
       setFeePercentage(res.data.feePercentage || 0);

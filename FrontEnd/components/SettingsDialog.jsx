@@ -56,7 +56,6 @@ export default function SettingsDialog({ isOpen, onClose, user, wallet, onDelete
         onClick={(e) => e.stopPropagation()}
       >
         
-        {/* Header */}
         <div className="p-4 flex items-center gap-2 border-b border-neutral-100 dark:border-neutral-800">
             <button onClick={onClose} className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors">
                 <IconChevronRight className="rotate-180 w-6 h-6 text-neutral-700 dark:text-neutral-300" />
@@ -66,7 +65,6 @@ export default function SettingsDialog({ isOpen, onClose, user, wallet, onDelete
 
         <div className="overflow-y-auto p-4 space-y-6">
             
-            {/* UPI ID Section */}
             <div className="space-y-2">
                 <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">UPI ID</div>
                 <div className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
@@ -81,7 +79,6 @@ export default function SettingsDialog({ isOpen, onClose, user, wallet, onDelete
                 </div>
             </div>
 
-            {/* Bank Accounts Section */}
             <div className="space-y-2">
                  <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Bank Accounts</div>
                  <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl overflow-hidden">

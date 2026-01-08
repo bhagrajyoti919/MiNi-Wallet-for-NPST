@@ -33,22 +33,17 @@ def update_me(request: UserUpdateRequest, user: dict = Depends(get_current_user)
 @router.post("/me/image")
 def upload_profile_image(file: UploadFile = File(...), user: dict = Depends(get_current_user)):
     try:
-        # Create unique filename
         file_extension = os.path.splitext(file.filename)[1]
         filename = f"{user['id']}_{uuid.uuid4()}{file_extension}"
         file_path = f"uploads/profiles/{filename}"
         
-        # Save file
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
             
-        # Update user in DB
         db = read_db()
-        # Find the user in the db list to update the reference
         db_user_idx = next((i for i, u in enumerate(db["users"]) if u["id"] == user["id"]), None)
         
         if db_user_idx is not None:
-            # Remove old image if exists
             old_image = db["users"][db_user_idx].get("profileImage")
             if old_image and os.path.exists(old_image):
                 try:
@@ -56,7 +51,6 @@ def upload_profile_image(file: UploadFile = File(...), user: dict = Depends(get_
                 except:
                     pass
             
-            # Update path - convert to forward slashes for URL compatibility
             db["users"][db_user_idx]["profileImage"] = file_path.replace("\\", "/")
             write_db(db)
             

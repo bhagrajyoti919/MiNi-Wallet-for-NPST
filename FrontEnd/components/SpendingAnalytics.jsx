@@ -14,9 +14,7 @@ import {
 
 export default function SpendingAnalytics({ transactions = [] }) {
   
-  // Process data for charts
   const { monthlyData, dailyData } = useMemo(() => {
-    // If no transactions, use mock data for visualization
     if (!transactions || transactions.length === 0) {
       const mockMonthly = [
         { name: 'Jan', spending: 4000, income: 2400 },
@@ -36,18 +34,14 @@ export default function SpendingAnalytics({ transactions = [] }) {
       return { monthlyData: mockMonthly, dailyData: mockDaily };
     }
 
-    // Process real transactions
-    // Group by Month (simplified for demo - just taking last 6 months or all)
-    // Assuming transaction has { created_at, amount, type }
     const months = {};
     const days = {};
     
     transactions.forEach(tx => {
       const date = new Date(tx.created_at || Date.now());
       const monthKey = date.toLocaleString('default', { month: 'short' });
-      const dayKey = date.toLocaleString('default', { weekday: 'short' }); // Or date number
+      const dayKey = date.toLocaleString('default', { weekday: 'short' });
       
-      // Monthly Spending (Paid type)
       if (!months[monthKey]) months[monthKey] = { name: monthKey, spending: 0, income: 0 };
       if (tx.type === 'Paid') {
         months[monthKey].spending += tx.amount;
@@ -55,7 +49,6 @@ export default function SpendingAnalytics({ transactions = [] }) {
         months[monthKey].income += tx.amount;
       }
 
-      // Daily Volume (Total)
       if (!days[dayKey]) days[dayKey] = { day: dayKey, amount: 0 };
       days[dayKey].amount += tx.amount;
     });
@@ -68,7 +61,6 @@ export default function SpendingAnalytics({ transactions = [] }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      {/* Monthly Spending Chart */}
       <div className="p-6 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
         <div className="flex items-center justify-between mb-6">
             <div>

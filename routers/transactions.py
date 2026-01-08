@@ -28,7 +28,6 @@ def get_transactions(
     user: dict = Depends(get_current_user)
 ):
     db = read_db()
-    # Find user's wallet
     wallet = next((w for w in db["wallets"] if w["userId"] == user["id"]), None)
     if not wallet:
         return {"total": 0, "data": []}
@@ -38,33 +37,27 @@ def get_transactions(
         if not t.get("isDeleted") and t["walletId"] == wallet["id"]
     ]
 
-    # 1. Status Filter (Case-insensitive)
     if status:
         status_lower = status.value.lower()
         transactions = [t for t in transactions if t["status"].lower() == status_lower]
     
-    # 2. Type Filter (Paid, Received, Self transfer)
     if type:
         if type == TransactionType.PAID:
             transactions = [t for t in transactions if t["type"] == "debit"]
         elif type in [TransactionType.RECEIVED, TransactionType.SELF_TRANSFER]:
-            # Currently 'credit' covers Add Money (Self transfer/Received)
             transactions = [t for t in transactions if t["type"] == "credit"]
     
-    # 3. Amount Filter
     if min_amount is not None:
         transactions = [t for t in transactions if t["amount"] >= min_amount]
     if max_amount is not None:
         transactions = [t for t in transactions if t["amount"] <= max_amount]
 
-    # 4. Date Range Filter
     if start_date:
         transactions = [t for t in transactions if t["createdAt"] >= start_date]
         
     if end_date:
         transactions = [t for t in transactions if t["createdAt"] <= end_date]
 
-    # Sort by date (newest first)
     transactions.sort(key=lambda x: x["createdAt"], reverse=True)
 
     return {
@@ -83,7 +76,6 @@ def recent_transactions(user: dict = Depends(get_current_user)):
         t for t in db["transactions"] 
         if not t.get("isDeleted") and t["walletId"] == wallet["id"]
     ]
-    # Sort just in case, though db might be append-only
     user_txs.sort(key=lambda x: x["createdAt"], reverse=True)
     
     return user_txs[:10]

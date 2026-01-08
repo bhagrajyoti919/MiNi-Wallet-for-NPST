@@ -76,7 +76,6 @@ export function SignupForm({ onSuccess }) {
             <Label htmlFor="firstname">First name</Label>
             <Input 
               id="firstname" 
-              placeholder="John" 
               type="text" 
               value={formData.firstname}
               onChange={handleChange}
@@ -87,7 +86,6 @@ export function SignupForm({ onSuccess }) {
             <Label htmlFor="lastname">Last name</Label>
             <Input 
               id="lastname" 
-              placeholder="Doe" 
               type="text" 
               value={formData.lastname}
               onChange={handleChange}
@@ -100,7 +98,6 @@ export function SignupForm({ onSuccess }) {
           <Label htmlFor="email">Email Address</Label>
           <Input 
             id="email" 
-            placeholder="projectmayhem@fc.com" 
             type="email" 
             value={formData.email}
             onChange={handleChange}
@@ -173,21 +170,6 @@ export function SignupForm({ onSuccess }) {
             </>
           )}
         </button>
-
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-
-        <div className="flex flex-col space-y-4">
-          <button
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
-            type="button"
-          >
-            <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              Sign up with Google
-            </span>
-            <BottomGradient />
-          </button>
-        </div>
         
         <div className="mt-6 text-center text-sm">
           <span className="text-neutral-600 dark:text-neutral-400">Already a user? </span>

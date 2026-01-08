@@ -4,16 +4,13 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional
 from db import read_db
 
-# Security scheme for Swagger UI (adds the Authorize button)
 security = HTTPBearer(auto_error=False)
 
 def get_current_user(request: Request, bearer: Optional[HTTPAuthorizationCredentials] = Depends(security)):
     print(f"DEBUG: Cookies received: {request.cookies}")
     
-    # 1. Try to get token from Cookie (Frontend)
     token = request.cookies.get("token")
     
-    # 2. If no cookie, try to get token from Bearer Header (Swagger UI / API Tools)
     if not token and bearer:
         token = bearer.credentials
 

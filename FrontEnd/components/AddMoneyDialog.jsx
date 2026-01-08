@@ -38,7 +38,7 @@ export default function AddMoneyDialog({ isOpen, onClose, refreshWallet }) {
     } catch (err) {
         console.error("Add money failed", err);
         setError(err.response?.data?.detail || "Transaction failed");
-        setIsPinDialogOpen(false); // Close pin dialog so user can see error in AddMoney dialog
+        setIsPinDialogOpen(false);
     } finally {
         setIsLoading(false);
     }
@@ -54,7 +54,6 @@ export default function AddMoneyDialog({ isOpen, onClose, refreshWallet }) {
             className="bg-white dark:bg-neutral-900 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
         >
-            {/* Header */}
             <div className="p-4 flex items-center gap-2 border-b border-neutral-100 dark:border-neutral-800">
                 <button onClick={onClose} className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors">
                     <IconChevronRight className="rotate-180 w-6 h-6 text-neutral-700 dark:text-neutral-300" />

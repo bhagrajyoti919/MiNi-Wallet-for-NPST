@@ -45,7 +45,6 @@ def login(payload: LoginRequest, response: Response):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = f"mock-token-{user['id']}"
-    # Set token cookie for browser-based auth
     response.set_cookie(
         key="token",
         value=token,
@@ -72,7 +71,6 @@ def logout(response: Response):
 def set_pin(payload: SetPinRequest, user: dict = Depends(get_current_user)):
     db = read_db()
     
-    # Find user in DB (refetch to ensure we have reference to mutable obj in list)
     db_user = next((u for u in db["users"] if u["id"] == user["id"]), None)
     
     if not db_user:
@@ -87,16 +85,12 @@ def set_pin(payload: SetPinRequest, user: dict = Depends(get_current_user)):
 def delete_user(response: Response, user: dict = Depends(get_current_user)):
     db = read_db()
     
-    # Find user's wallet to clean up transactions
     user_wallet = next((w for w in db["wallets"] if w["userId"] == user["id"]), None)
     
     if user_wallet:
-        # Remove transactions associated with this wallet
-        # Check if transactions key exists, if not default to empty list (safe check)
         if "transactions" in db:
             db["transactions"] = [t for t in db["transactions"] if t.get("walletId") != user_wallet["id"]]
         
-        # Remove the wallet
         db["wallets"] = [w for w in db["wallets"] if w["id"] != user_wallet["id"]]
     
     # Remove the user
