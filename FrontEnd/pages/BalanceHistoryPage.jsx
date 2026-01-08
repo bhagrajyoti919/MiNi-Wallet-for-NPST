@@ -213,9 +213,38 @@ export default function BalanceHistoryPage({ onLogout }) {
     }
   };
 
+  const handleDownloadHistory = () => {
+    if (!filteredTransactions.length) {
+        alert("No transactions to download");
+        return;
+    }
+
+    const headers = ["Transaction ID", "Date", "Name", "Category", "Type", "Amount", "Status"];
+    const csvContent = [
+        headers.join(","),
+        ...filteredTransactions.map(tx => {
+            const { name, amountSign, category } = getTransactionDetails(tx);
+            const date = new Date(tx.createdAt).toLocaleString().replace(/,/g, ''); // Remove commas to avoid CSV issues
+            const type = tx.type;
+            const amount = `${amountSign}${tx.amount}`;
+            return [tx.id, date, `"${name}"`, `"${category}"`, type, amount, tx.status].join(",");
+        })
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `payment_history_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const links = [
     {
-      label: "Dashboard",
+      label: "Home",
       href: "#",
       icon: <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />,
       onClick: () => navigate("/")
@@ -255,7 +284,7 @@ export default function BalanceHistoryPage({ onLogout }) {
 
       <div
         className={cn(
-          "mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-100 md:flex-row dark:border-neutral-700 dark:bg-neutral-800",
+          "flex w-full flex-1 flex-col overflow-hidden bg-gray-100 md:flex-row dark:bg-neutral-800",
           "h-screen"
         )}
       >
@@ -385,6 +414,7 @@ export default function BalanceHistoryPage({ onLogout }) {
                                                     placeholder="0" 
                                                     className="h-8 text-xs" 
                                                     value={minAmount}
+                                                    onWheel={(e) => e.target.blur()}
                                                     onChange={(e) => setMinAmount(e.target.value)}
                                                 />
                                             </div>
@@ -395,6 +425,7 @@ export default function BalanceHistoryPage({ onLogout }) {
                                                     placeholder="Max" 
                                                     className="h-8 text-xs" 
                                                     value={maxAmount}
+                                                    onWheel={(e) => e.target.blur()}
                                                     onChange={(e) => setMaxAmount(e.target.value)}
                                                 />
                                             </div>
@@ -436,7 +467,10 @@ export default function BalanceHistoryPage({ onLogout }) {
                                     </div>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            <button className="p-2 rounded-full bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors">
+                            <button 
+                                onClick={handleDownloadHistory}
+                                className="p-2 rounded-full bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors"
+                            >
                                 <IconDownload className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
                             </button>
                         </div>

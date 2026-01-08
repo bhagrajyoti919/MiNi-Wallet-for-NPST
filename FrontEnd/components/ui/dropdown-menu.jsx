@@ -100,19 +100,18 @@ DropdownMenuTrigger.displayName = DropdownMenuPrimitive.Trigger.displayName
 const DropdownMenuContent = React.forwardRef(({ className, sideOffset = 4, maxHeight = "16rem", children, ...props }, ref) => {
   return (
     <DropdownMenuPrimitive.Portal>
-      <AnimatePresence>
-        <DropdownMenuPrimitive.Content
-          ref={ref}
-          data-slot="dropdown-menu-content"
-          sideOffset={sideOffset}
-          className="z-50"
-          asChild
-          {...props}>
-          <motion.div
-            variants={dropdownVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+      <DropdownMenuPrimitive.Content
+        ref={ref}
+        data-slot="dropdown-menu-content"
+        sideOffset={sideOffset}
+        className="z-50"
+        asChild
+        {...props}>
+        <motion.div
+          variants={dropdownVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
             className={cn(
               "w-72 rounded-xl border shadow-xl overflow-hidden [perspective:800px] [transform-style:preserve-3d]",
               "bg-white/80 border-neutral-900/10 backdrop-blur-md",
@@ -154,7 +153,6 @@ const DropdownMenuContent = React.forwardRef(({ className, sideOffset = 4, maxHe
             </div>
           </motion.div>
         </DropdownMenuPrimitive.Content>
-      </AnimatePresence>
     </DropdownMenuPrimitive.Portal>
   );
 })

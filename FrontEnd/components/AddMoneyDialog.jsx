@@ -79,6 +79,7 @@ export default function AddMoneyDialog({ isOpen, onClose, refreshWallet }) {
                                 <input 
                                     type="number" 
                                     value={amount} 
+                                    onWheel={(e) => e.target.blur()}
                                     onChange={e => setAmount(e.target.value)} 
                                     placeholder="0.00"
                                     autoFocus

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { IconCopy, IconBuildingBank, IconTrash, IconChevronRight, IconCheck, IconCurrencyRupee } from "@tabler/icons-react";
+import { IconCopy, IconBuildingBank, IconTrash, IconChevronRight, IconCheck, IconCurrencyRupee, IconSun, IconMoon } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import api from "../api/api";
+import { useTheme } from "./ThemeProvider";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 export default function SettingsDialog({ isOpen, onClose, user, wallet, onDeleteUser, onCheckBalance }) {
+  const { theme, setTheme } = useTheme();
   const [isCopied, setIsCopied] = useState(false);
   const [transactionLimit, setTransactionLimit] = useState(null);
   const [isEditingLimit, setIsEditingLimit] = useState(false);
   const [newLimit, setNewLimit] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -99,7 +103,37 @@ export default function SettingsDialog({ isOpen, onClose, user, wallet, onDelete
                             </div>
                         </div>
                     </div>
-                 </div>
+                </div>
+            </div>
+
+            <div className="space-y-2">
+                <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Appearance</div>
+                <div className="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-1 flex items-center">
+                    <button
+                        onClick={() => setTheme("light")}
+                        className={cn(
+                            "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all",
+                            theme === "light" 
+                                ? "bg-white text-neutral-900 shadow-sm" 
+                                : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+                        )}
+                    >
+                        <IconSun size={18} />
+                        <span>Light</span>
+                    </button>
+                    <button
+                        onClick={() => setTheme("dark")}
+                        className={cn(
+                            "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all",
+                            theme === "dark" 
+                                ? "bg-neutral-700 text-white shadow-sm" 
+                                : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+                        )}
+                    >
+                        <IconMoon size={18} />
+                        <span>Dark</span>
+                    </button>
+                </div>
             </div>
 
              {/* Transaction Limit Section */}
@@ -128,8 +162,9 @@ export default function SettingsDialog({ isOpen, onClose, user, wallet, onDelete
                             <input 
                                 type="number" 
                                 value={newLimit}
+                                onWheel={(e) => e.target.blur()}
                                 onChange={(e) => setNewLimit(e.target.value)}
-                                className="flex-1 px-3 py-2 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm bg-transparent"
+                                className="flex-1 px-3 py-2 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm bg-transparent dark:text-white"
                                 placeholder="Enter limit"
                             />
                             <button 
@@ -160,13 +195,8 @@ export default function SettingsDialog({ isOpen, onClose, user, wallet, onDelete
              <div className="space-y-2">
                  <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Others</div>
                  <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl overflow-hidden divide-y divide-neutral-100 dark:divide-neutral-800">
-                    <button className="w-full p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors text-left">
-                        <span className="text-neutral-700 dark:text-neutral-300 font-medium">Manage UPI numbers</span>
-                        <div className="bg-orange-100 text-orange-600 text-[10px] font-bold px-2 py-0.5 rounded">NEW</div>
-                    </button>
-                    
                     <button 
-                        onClick={onDeleteUser}
+                        onClick={() => setShowDeleteConfirm(true)}
                         className="w-full p-4 flex items-center justify-between hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors text-left group"
                     >
                         <span className="text-neutral-700 dark:text-neutral-300 font-medium group-hover:text-red-600 transition-colors">Deregister UPI</span>
@@ -178,6 +208,16 @@ export default function SettingsDialog({ isOpen, onClose, user, wallet, onDelete
         </div>
 
       </div>
+
+      <ConfirmationDialog 
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={onDeleteUser}
+        title="Deregister UPI"
+        message="Are you sure you want to deregister your UPI ID? This will delete your account and you won't be able to access your wallet anymore. This action cannot be undone."
+        confirmText="Yes, Deregister"
+        type="danger"
+      />
     </div>
   );
 }

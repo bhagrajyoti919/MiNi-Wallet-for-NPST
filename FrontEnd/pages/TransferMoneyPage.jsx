@@ -129,7 +129,7 @@ export default function TransferMoneyPage({ onLogout }) {
 
   const links = [
     {
-      label: "Dashboard",
+      label: "Home",
       href: "#",
       icon: (
         <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
@@ -215,7 +215,7 @@ export default function TransferMoneyPage({ onLogout }) {
       
       <div
         className={cn(
-          "mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-100 md:flex-row dark:border-neutral-700 dark:bg-neutral-800",
+          "flex w-full flex-1 flex-col overflow-hidden bg-gray-100 md:flex-row dark:bg-neutral-800",
           "h-screen"
         )}
       >
@@ -295,6 +295,7 @@ export default function TransferMoneyPage({ onLogout }) {
                                             className="w-full pl-10 pr-4 py-4 text-4xl font-bold text-center bg-transparent border-b-2 border-neutral-200 focus:border-blue-500 outline-none transition-colors text-neutral-800 dark:text-neutral-200"
                                             placeholder="0"
                                             value={amount}
+                                            onWheel={(e) => e.target.blur()}
                                             onChange={(e) => {
                                                 setAmount(e.target.value);
                                                 setError("");
@@ -361,11 +362,11 @@ export default function TransferMoneyPage({ onLogout }) {
                         {/* Suggestions Section */}
                         <div className="mb-10">
                             <h2 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-4">Suggested People</h2>
-                            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6">
                                 {filteredUsers.slice(0, 10).map((user) => (
                                 <button 
                                     key={user.id} 
-                                    className="flex flex-col items-center gap-3 min-w-[90px] group"
+                                    className="flex flex-col items-center gap-3 min-w-[60px] group"
                                     onClick={() => handleUserSelect(user)}
                                 >
                                     <div className="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xl overflow-hidden border-2 border-transparent group-hover:border-blue-500 transition-all">
