@@ -26,7 +26,11 @@ export default function Login({ onLogin }) {
     } catch (err) {
       console.error("Login failed details:", err.response ? err.response.data : err.message);
       console.error("Full error:", err);
-      setError(err.response?.data?.detail || "Invalid credentials. Please try again.");
+      if (!err.response) {
+        setError("Unable to connect to server. Please check your internet connection or try again later.");
+      } else {
+        setError(err.response?.data?.detail || "Invalid credentials. Please try again.");
+      }
       setIsLoading(false);
     }
   };

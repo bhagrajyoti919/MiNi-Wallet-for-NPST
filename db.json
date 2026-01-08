@@ -569,6 +569,18 @@
       "status": "success",
       "isDeleted": true,
       "createdAt": "2026-01-07T23:08:39.628735Z"
+    },
+    {
+      "id": "tx_16728ba9",
+      "walletId": "w_d004ee5b",
+      "type": "debit",
+      "amount": 516.0,
+      "fee": 0,
+      "toUserId": "u_f9e92543",
+      "status": "failed",
+      "reason": "Transfer limit exceeded",
+      "isDeleted": false,
+      "createdAt": "2026-01-07T23:32:13.014723Z"
     }
   ],
   "businessRules": {

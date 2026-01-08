@@ -11,9 +11,7 @@ import {
   IconFilter,
   IconWallet,
   IconDownload,
-  IconTrash,
-  IconChevronLeft,
-  IconChevronRight
+  IconTrash
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -34,7 +32,6 @@ import PinDialog from "../components/PinDialog";
 import SettingsDialog from "../components/SettingsDialog";
 import ProfileDialog from "../components/ProfileDialog";
 import ConfirmationDialog from "../components/ConfirmationDialog";
-import TransactionItem from "../components/TransactionItem";
 
 export default function BalanceHistoryPage({ onLogout }) {
   const navigate = useNavigate();
@@ -63,9 +60,6 @@ export default function BalanceHistoryPage({ onLogout }) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [limit] = useState(10);
 
   // Dialog states (for sidebar)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -82,8 +76,6 @@ export default function BalanceHistoryPage({ onLogout }) {
       const max = overrides.maxAmount !== undefined ? overrides.maxAmount : maxAmount;
       const start = overrides.startDate !== undefined ? overrides.startDate : startDate;
       const end = overrides.endDate !== undefined ? overrides.endDate : endDate;
-      const currentPage = overrides.page !== undefined ? overrides.page : page;
-      const search = overrides.search !== undefined ? overrides.search : searchQuery;
 
       if (sFilter !== "All") params.status = sFilter;
       
@@ -97,21 +89,15 @@ export default function BalanceHistoryPage({ onLogout }) {
       if (max) params.max_amount = max;
       if (start) params.start_date = start;
       if (end) params.end_date = end;
-      if (search) params.search = search;
-      
-      params.page = currentPage;
-      params.limit = limit;
 
       const res = await api.get("/transactions", { params });
       let data = res.data.data || [];
-      const total = res.data.total || 0;
       
       if (!showSent && !showReceived) {
         data = [];
       }
 
       setTransactions(data);
-      setTotalPages(Math.ceil(total / limit));
     } catch (err) {
       console.error("Failed to fetch transactions", err);
     } finally {
@@ -136,21 +122,6 @@ export default function BalanceHistoryPage({ onLogout }) {
     fetchUserData();
     fetchTransactions();
   }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-        setPage(1);
-        fetchTransactions({ page: 1 });
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-        setPage(newPage);
-        fetchTransactions({ page: newPage });
-    }
-  };
 
   const handleClearFilters = () => {
     setStatusFilter("All");
@@ -479,38 +450,59 @@ export default function BalanceHistoryPage({ onLogout }) {
                     <div className="flex flex-col gap-4 min-h-[400px]">
                         {loading ? (
                             <div className="text-center py-10 text-neutral-500">Loading history...</div>
-                        ) : transactions.length > 0 ? (
-                            <>
-                                {transactions.map((tx) => (
-                                    <TransactionItem 
+                        ) : filteredTransactions.length > 0 ? (
+                            filteredTransactions.map((tx) => {
+                                const { name, amountColor, amountSign, category } = getTransactionDetails(tx);
+                                return (
+                                    <div 
                                         key={tx.id} 
-                                        tx={tx} 
-                                        users={users} 
-                                        onDelete={handleDeleteTransaction} 
-                                    />
-                                ))}
-                                {totalPages > 1 && (
-                                    <div className="flex items-center justify-center gap-4 mt-6">
-                                        <button
-                                            onClick={() => handlePageChange(page - 1)}
-                                            disabled={page === 1}
-                                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            <IconChevronLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
-                                        </button>
-                                        <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                                            Page {page} of {totalPages}
-                                        </span>
-                                        <button
-                                            onClick={() => handlePageChange(page + 1)}
-                                            disabled={page === totalPages}
-                                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            <IconChevronRight className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
-                                        </button>
+                                        className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                                {name === "Wallet Top-up" ? <IconWallet className="w-6 h-6" /> : <IconUser className="w-6 h-6" />}
+                                            </div>
+                                            <div>
+                                                <h3 className="font-semibold text-neutral-800 dark:text-neutral-200">{name}</h3>
+                                                <div className="flex items-center gap-2 text-xs text-neutral-500 mt-0.5">
+                                                    <span>{new Date(tx.createdAt).toLocaleString()}</span>
+                                                    <span className="w-1 h-1 bg-neutral-300 rounded-full"></span>
+                                                    <span className="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 rounded-full text-xs">
+                                                        {category}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-right">
+                                                <div className={`font-bold ${amountColor} text-lg`}>
+                                                    {amountSign}₹{tx.amount.toLocaleString()}
+                                                </div>
+                                                <div className="text-xs text-neutral-400 mt-1 flex flex-col items-end gap-0.5">
+                                                    <div className="flex items-center gap-1">
+                                                        <span className={tx.status === 'failed' ? 'text-red-500 capitalize' : 'capitalize'}>{tx.status}</span>
+                                                        {tx.status === 'success' && <div className="w-2 h-2 bg-green-500 rounded-full"></div>}
+                                                        {tx.status === 'failed' && <div className="w-2 h-2 bg-red-500 rounded-full"></div>}
+                                                    </div>
+                                                    {tx.status === 'failed' && tx.reason && (
+                                                        <span className="text-[10px] text-red-400">{tx.reason}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteTransaction(tx.id);
+                                                }}
+                                                className="p-2 text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
+                                                title="Delete transaction"
+                                            >
+                                                <IconTrash size={18} />
+                                            </button>
+                                        </div>
                                     </div>
-                                )}
-                            </>
+                                );
+                            })
                         ) : (
                             <div className="text-center py-12 text-neutral-500 bg-gray-50 dark:bg-neutral-800/50 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
                                 No transactions found matching your search.

@@ -1,33 +1,33 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional, Literal
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 class RegisterRequest(BaseModel):
-    name: str = Field(..., min_length=2)
+    name: str
     email: EmailStr
-    password: str = Field(..., min_length=6)
+    password: str
 
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
 class SetPinRequest(BaseModel):
-    pin: str = Field(..., min_length=4, max_length=6, pattern=r"^\d+$")
+    pin: str
 
 class AddMoneyRequest(BaseModel):
-    amount: float = Field(..., gt=0)
-    pin: str = Field(..., min_length=4, max_length=6, pattern=r"^\d+$")
+    amount: float
+    pin: str
 
 class TransferRequest(BaseModel):
     toUserId: str
-    amount: float = Field(..., gt=0)
-    pin: str = Field(..., min_length=4, max_length=6, pattern=r"^\d+$")
+    amount: float
+    pin: str
 
 class UserUpdateRequest(BaseModel):
-    name: str = Field(..., min_length=2)
+    name: str
 
 class TransactionStatusUpdate(BaseModel):
-    status: Literal["success", "pending", "failed"]
+    status: str
     reason: Optional[str] = None
 
 class BusinessRulesUpdate(BaseModel):
-    maxTransferLimit: float = Field(..., gt=0)
+    maxTransferLimit: float
