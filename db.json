@@ -173,7 +173,7 @@
     {
       "id": "w_d004ee5b",
       "userId": "u_9c6afc9a",
-      "balance": 912392.76,
+      "balance": 912134.7,
       "currency": "INR"
     },
     {
@@ -185,7 +185,7 @@
     {
       "id": "w_9024df61",
       "userId": "u_f9e92543",
-      "balance": 221.0,
+      "balance": 474.0,
       "currency": "INR"
     },
     {
@@ -581,6 +581,28 @@
       "reason": "Transfer limit exceeded",
       "isDeleted": false,
       "createdAt": "2026-01-07T23:32:13.014723Z"
+    },
+    {
+      "id": "tx_5a295b16",
+      "walletId": "w_d004ee5b",
+      "type": "debit",
+      "amount": 253.0,
+      "fee": 5.06,
+      "toUserId": "u_f9e92543",
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-08T18:51:34.837889Z"
+    },
+    {
+      "id": "tx_a6b68a38",
+      "walletId": "w_9024df61",
+      "type": "credit",
+      "amount": 253.0,
+      "fee": 0,
+      "fromUserId": "u_9c6afc9a",
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-08T18:51:34.837889Z"
     }
   ],
   "businessRules": {
