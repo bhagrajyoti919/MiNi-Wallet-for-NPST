@@ -9,6 +9,7 @@ import {
   IconUserBolt,
   IconSend,
   IconPlus,
+  IconRefresh,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -230,6 +231,7 @@ export default function Dashboard({ onLogout }) {
         transactions={transactions} 
         refreshWallet={refreshWallet}
         onAddMoneyClick={() => setIsAddMoneyOpen(true)}
+        onOpenPin={() => setIsPinDialogOpen(true)}
       />
     </div>
     </>
@@ -266,8 +268,35 @@ export const LogoIcon = () => {
 };
 
 // Dashboard component with content
-const DashboardContent = ({ user, wallet, transactions, refreshWallet, onAddMoneyClick }) => {
+const DashboardContent = ({ user, wallet, transactions, refreshWallet, onAddMoneyClick, onOpenPin }) => {
   const navigate = useNavigate();
+  const [showBalance, setShowBalance] = useState(false);
+  const [isBalanceRequested, setIsBalanceRequested] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (wallet && isBalanceRequested) {
+        setShowBalance(true);
+        setIsBalanceRequested(false);
+    }
+  }, [wallet, isBalanceRequested]);
+
+  const handleCheckBalanceClick = (e) => {
+      e.stopPropagation();
+      if (wallet) {
+          setShowBalance(!showBalance);
+      } else {
+          setIsBalanceRequested(true);
+          onOpenPin();
+      }
+  };
+
+  const handleRefreshClick = async (e) => {
+      e.stopPropagation();
+      setIsRefreshing(true);
+      await refreshWallet();
+      setTimeout(() => setIsRefreshing(false), 500); // Minimum spin time for better UX
+  };
 
   if (!user) {
     return (
@@ -302,7 +331,28 @@ const DashboardContent = ({ user, wallet, transactions, refreshWallet, onAddMone
                     <IconBrandTabler className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold">Balance & History</h3>
-                <p className="text-sm opacity-80 mt-1">Check balance and transactions</p>
+                <div className="mt-2 min-h-[32px] flex items-center">
+                    {wallet && showBalance ? (
+                        <div className="flex items-center gap-3">
+                            <span className="text-2xl font-bold">₹{wallet.balance.toLocaleString()}</span>
+                            <button 
+                               onClick={handleRefreshClick}
+                               className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                               title="Reload Balance"
+                               disabled={isRefreshing}
+                            >
+                               <IconRefresh className={cn("w-4 h-4 text-white/80", isRefreshing && "animate-spin")} />
+                            </button>
+                        </div>
+                    ) : (
+                         <button 
+                            onClick={handleCheckBalanceClick}
+                            className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full text-xs font-medium transition-colors backdrop-blur-sm"
+                         >
+                            Check Balance
+                         </button>
+                    )}
+                </div>
              </div>
              <div className="flex items-center gap-2 text-sm font-medium mt-4">
                 <span>View Details</span>

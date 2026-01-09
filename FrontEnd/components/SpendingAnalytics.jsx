@@ -34,28 +34,72 @@ export default function SpendingAnalytics({ transactions = [] }) {
       return { monthlyData: mockMonthly, dailyData: mockDaily };
     }
 
-    const months = {};
-    const days = {};
+    const today = new Date();
     
-    transactions.forEach(tx => {
-      const date = new Date(tx.created_at || Date.now());
-      const monthKey = date.toLocaleString('default', { month: 'short' });
-      const dayKey = date.toLocaleString('default', { weekday: 'short' });
-      
-      if (!months[monthKey]) months[monthKey] = { name: monthKey, spending: 0, income: 0 };
-      if (tx.type === 'Paid') {
-        months[monthKey].spending += tx.amount;
-      } else {
-        months[monthKey].income += tx.amount;
-      }
+    // Helper to check if two dates are same day
+    const isSameDay = (d1, d2) => {
+        return d1.getDate() === d2.getDate() &&
+               d1.getMonth() === d2.getMonth() &&
+               d1.getFullYear() === d2.getFullYear();
+    };
 
-      if (!days[dayKey]) days[dayKey] = { day: dayKey, amount: 0 };
-      days[dayKey].amount += tx.amount;
+    // Helper to check if two dates are same month
+    const isSameMonth = (d1, d2) => {
+        return d1.getMonth() === d2.getMonth() &&
+               d1.getFullYear() === d2.getFullYear();
+    };
+
+    // 1. Last 7 Days Data
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        last7Days.push(d);
+    }
+
+    const processedDailyData = last7Days.map(day => {
+        const dayTotal = transactions
+            .filter(tx => tx.created_at && isSameDay(new Date(tx.created_at), day))
+            .reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
+            
+        return {
+            day: day.toLocaleString('default', { weekday: 'short' }),
+            fullDate: day.toISOString().split('T')[0], // for uniqueness if needed
+            amount: dayTotal
+        };
+    });
+
+    // 2. Last 6 Months Data
+    const last6Months = [];
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        last6Months.push(d);
+    }
+
+    const processedMonthlyData = last6Months.map(month => {
+        const monthTx = transactions.filter(tx => 
+            tx.created_at && isSameMonth(new Date(tx.created_at), month)
+        );
+
+        const spending = monthTx
+            .filter(tx => tx.type === 'debit' || tx.type === 'Paid') // Handle both potential values to be safe
+            .reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
+            
+        const income = monthTx
+            .filter(tx => tx.type === 'credit' || tx.type === 'Received')
+            .reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
+
+        return {
+            name: month.toLocaleString('default', { month: 'short' }),
+            year: month.getFullYear(),
+            spending,
+            income
+        };
     });
 
     return { 
-      monthlyData: Object.values(months), 
-      dailyData: Object.values(days) 
+      monthlyData: processedMonthlyData, 
+      dailyData: processedDailyData 
     };
   }, [transactions]);
 

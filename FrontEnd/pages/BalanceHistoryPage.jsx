@@ -28,7 +28,6 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import api from "../api/api";
-import PinDialog from "../components/PinDialog";
 import SettingsDialog from "../components/SettingsDialog";
 import ProfileDialog from "../components/ProfileDialog";
 import ConfirmationDialog from "../components/ConfirmationDialog";
@@ -43,11 +42,6 @@ export default function BalanceHistoryPage({ onLogout }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  const [balance, setBalance] = useState(null);
-  const [showBalance, setShowBalance] = useState(false);
-  const [isBalancePinOpen, setIsBalancePinOpen] = useState(false);
-  const [balanceError, setBalanceError] = useState("");
-
   const [searchQuery, setSearchQuery] = useState("");
   const [showSent, setShowSent] = useState(true);
   const [showReceived, setShowReceived] = useState(true);
@@ -169,20 +163,6 @@ export default function BalanceHistoryPage({ onLogout }) {
     
     return matchesSearch;
   });
-
-  const handleCheckBalance = async (pin) => {
-    setBalanceError("");
-    try {
-      const res = await api.get("/wallet", {
-        headers: { "X-Wallet-Pin": pin }
-      });
-      setBalance(res.data.balance);
-      setShowBalance(true);
-      setIsBalancePinOpen(false);
-    } catch (err) {
-      setBalanceError(err.response?.data?.detail || "Invalid PIN");
-    }
-  };
 
   const handleDeleteUser = async () => {
       if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
@@ -330,36 +310,6 @@ export default function BalanceHistoryPage({ onLogout }) {
                         <IconArrowLeft className="w-6 h-6 text-neutral-600 dark:text-neutral-300" />
                     </button>
                     <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200">Balance & History</h1>
-                </div>
-
-                {/* Check Balance Card */}
-                <div className="w-full bg-blue-500 dark:bg-blue-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                        <IconWallet className="w-32 h-32" />
-                    </div>
-                    <div className="relative z-10 flex flex-col gap-2">
-                        <h2 className="text-lg font-medium opacity-90">Total Balance</h2>
-                        <div className="mt-2">
-                            {showBalance ? (
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-4xl font-bold">₹{balance?.toLocaleString()}</span>
-                                </div>
-                            ) : (
-                                <button 
-                                    onClick={() => setIsBalancePinOpen(true)}
-                                    className="bg-white text-blue-600 px-6 py-2 rounded-full font-semibold hover:bg-blue-50 transition-colors shadow-sm"
-                                >
-                                    Check Balance
-                                </button>
-                            )}
-                        </div>
-                        {currentUser && (
-                            <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between text-sm opacity-80">
-                                <span>{currentUser.name}</span>
-                                <span>{currentUser.email}</span>
-                            </div>
-                        )}
-                    </div>
                 </div>
 
                 {/* Payment History Section */}
@@ -542,15 +492,6 @@ export default function BalanceHistoryPage({ onLogout }) {
             </div>
         </div>
       </div>
-
-      <PinDialog 
-        isOpen={isBalancePinOpen}
-        mode="enter"
-        onSubmit={handleCheckBalance}
-        onCancel={() => setIsBalancePinOpen(false)}
-        error={balanceError}
-        title="Enter PIN to Check Balance"
-      />
       
       <ConfirmationDialog 
         isOpen={!!transactionToDelete}

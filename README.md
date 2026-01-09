@@ -2,7 +2,7 @@ Mini Wallet Application
 
 A simple full-stack wallet application built with a modern React frontend and a FastAPI backend. The app allows users to manage a digital wallet, perform transactions, track expenses, and view their financial growth through clean and interactive visuals.
 
-🏗 Architecture Overview
+ Architecture Overview
 
 The project is designed using a clean client–server architecture where the frontend and backend are fully decoupled.
 
@@ -36,7 +36,7 @@ API Structure: Modular routers (auth, users, wallet, transactions)
 
 Static Assets: Profile images served from the /uploads directory
 
-🚀 How to Run the Project
+ How to Run the Project
 Prerequisites
 
 Node.js (v18+ recommended)
@@ -81,7 +81,7 @@ The frontend will run at:
 http://localhost:3000
  (or the port shown in the terminal)
 
-🧪 Testing the Application
+ Testing the Application
 Backend / API Testing
 
 Swagger UI:
@@ -98,7 +98,7 @@ Authentication: Sign up for a new account or log in with existing credentials.
 Dashboard: Check wallet statistics, the “Safe & Secure Transaction” card, and growth charts.
 
 Transactions: Send money and verify that transactions appear correctly in the history.
-🤖 Automated Testing Suite
+ Automated Testing Suite
 
 The project includes a simple, one-command automated testing setup using tests.py. This script runs a basic end-to-end validation of both the backend and frontend to ensure everything works together as expected.
 
@@ -122,7 +122,7 @@ How to run the tests:
 
 python tests.py
 
-📝 Assumptions
+ Assumptions
 
 Data Storage:
 The application uses a local db.json file for persistence. This is intended for development and demo purposes only, not for production use.
@@ -133,7 +133,7 @@ The project is configured to run locally, with CORS enabled for common developme
 Session Handling:
 Authentication tokens are stored in localStorage on the frontend for simplicity.
 
-⚠️ Known Limitations
+ Known Limitations
 
 Concurrency:
 The JSON-based database is not suitable for high-traffic or concurrent environments.
