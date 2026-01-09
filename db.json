@@ -160,7 +160,7 @@
     {
       "id": "w_d004ee5b",
       "userId": "u_9c6afc9a",
-      "balance": 912134.7,
+      "balance": 917134.7,
       "currency": "INR"
     },
     {
@@ -590,6 +590,16 @@
       "status": "success",
       "isDeleted": false,
       "createdAt": "2026-01-08T18:51:34.837889Z"
+    },
+    {
+      "id": "tx_96a11634",
+      "walletId": "w_d004ee5b",
+      "type": "credit",
+      "amount": 5000.0,
+      "fee": 0,
+      "status": "success",
+      "isDeleted": false,
+      "createdAt": "2026-01-09T09:12:20.192416Z"
     }
   ],
   "businessRules": {

@@ -24,16 +24,16 @@ export function AceternityLoginForm({ onLogin, error, onSignup, isLoading }) {
   };
 
   return (
-    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black/80 backdrop-blur-sm border border-neutral-800">
-      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
+    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-black/80 p-4 md:rounded-2xl md:p-8 backdrop-blur-sm border border-neutral-800">
+      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200 text-white">
         Welcome Back
       </h2>
-      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
+      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300 text-neutral-300">
         Login to FinTech Wallet
       </p>
       <form className="my-8" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="username">Email Address</Label>
+          <Label htmlFor="username" className="text-white">Email Address</Label>
           <Input 
             id="username" 
             placeholder="bhag@example.com" 
@@ -43,7 +43,7 @@ export function AceternityLoginForm({ onLogin, error, onSignup, isLoading }) {
           />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-white">Password</Label>
           <div className="relative">
             <Input 
               id="password" 
@@ -82,7 +82,7 @@ export function AceternityLoginForm({ onLogin, error, onSignup, isLoading }) {
         </button>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2 text-neutral-300">
             Not a Registered User?
           </p>
           <button

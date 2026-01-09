@@ -62,18 +62,18 @@ export function SignupForm({ onSuccess }) {
   };
 
   return (
-    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black/80 backdrop-blur-sm border border-neutral-800">
-      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
+    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-black/80 p-4 md:rounded-2xl md:p-8 backdrop-blur-sm border border-neutral-800">
+      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200 text-white">
         Create your account
       </h2>
-      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
+      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300 text-neutral-300">
         Enter your details to sign up
       </p>
 
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Label htmlFor="firstname">First name</Label>
+            <Label htmlFor="firstname" className="text-white">First name</Label>
             <Input 
               id="firstname" 
               type="text" 
@@ -83,7 +83,7 @@ export function SignupForm({ onSuccess }) {
             />
           </LabelInputContainer>
           <LabelInputContainer>
-            <Label htmlFor="lastname">Last name</Label>
+            <Label htmlFor="lastname" className="text-white">Last name</Label>
             <Input 
               id="lastname" 
               type="text" 
@@ -95,7 +95,7 @@ export function SignupForm({ onSuccess }) {
         </div>
 
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
+          <Label htmlFor="email" className="text-white">Email Address</Label>
           <Input 
             id="email" 
             type="email" 
@@ -106,7 +106,7 @@ export function SignupForm({ onSuccess }) {
         </LabelInputContainer>
 
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-white">Password</Label>
           <div className="relative">
             <Input 
               id="password" 
@@ -131,7 +131,7 @@ export function SignupForm({ onSuccess }) {
         </LabelInputContainer>
 
         <LabelInputContainer className="mb-8">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword" className="text-white">Confirm Password</Label>
           <div className="relative">
             <Input 
               id="confirmPassword" 
@@ -172,7 +172,7 @@ export function SignupForm({ onSuccess }) {
         </button>
         
         <div className="mt-6 text-center text-sm">
-          <span className="text-neutral-600 dark:text-neutral-400">Already a user? </span>
+          <span className="text-neutral-600 dark:text-neutral-400 text-neutral-300">Already a user? </span>
           <button
             type="button"
             onClick={() => {

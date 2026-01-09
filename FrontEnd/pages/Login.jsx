@@ -36,7 +36,7 @@ export default function Login({ onLogin }) {
   };
 
   return (
-    <div className="min-h-screen w-full bg-neutral-950 relative flex flex-col items-center justify-center antialiased">
+    <div className="min-h-screen w-full bg-neutral-950 relative flex flex-col items-center justify-center">
       <HeroSection onLogin={() => setShowLogin(true)} />
 
       {showLogin && (
